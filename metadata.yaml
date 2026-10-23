@@ -1,10 +1,10 @@
-name: __NAME__
-cloud: __CLOUD__          # aws | google | common
+name: terraform-google-cloud-function
+cloud: google          # aws | google | common
 tier: capability          # primitive | capability | blueprint
 maturity: experimental    # experimental | stable | deprecated
-description: __DESCRIPTION__
+description: Cloud Functions gen2 with a dedicated service account, secret-backed environment, HTTP or event triggers, and a versioned source bucket
 owners: [platform]
 upstream: null            # e.g. "terraform-aws-modules/s3-bucket/aws 5.17.0"
 pairs_with: null          # e.g. "terraform-google-gcs-bucket"
-registry_name: __NAME__
+registry_name: terraform-google-cloud-function
 deprecated: null          # { removal: YYYY-MM-DD, replacement: <repo> }

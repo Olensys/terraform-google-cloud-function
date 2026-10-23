@@ -1,6 +1,6 @@
-# __NAME__
+# terraform-google-cloud-function
 
-__DESCRIPTION__
+Cloud Functions gen2 with a dedicated service account, secret-backed environment, HTTP or event triggers, and a versioned source bucket
 
 ## Opinions
 
@@ -10,7 +10,7 @@ __DESCRIPTION__
 
 ```hcl
 module "this" {
-  source = "git::https://github.com/Olensys/__NAME__.git?ref=v1.0.0"
+  source = "git::https://github.com/Olensys/terraform-google-cloud-function.git?ref=v1.0.0"
 
   name = "example"
   context = {
