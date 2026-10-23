@@ -108,7 +108,7 @@ variable "scaling" {
 }
 
 variable "trigger" {
-  description = "What invokes the function. type is http, pubsub (needs topic), storage (needs bucket; fires on object finalize) or eventarc (needs event_type, for example google.cloud.audit.log.v1.written)."
+  description = "What invokes the function. type is http, pubsub (needs topic, the full projects/<project>/topics/<topic> name), storage (needs bucket; fires on object finalize; the function region must match the bucket location) or eventarc (needs event_type; only events that need no extra filters are supported)."
   type = object({
     type       = string
     topic      = optional(string)

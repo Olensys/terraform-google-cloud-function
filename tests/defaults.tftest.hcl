@@ -119,6 +119,28 @@ run "test_storage_trigger_filters_bucket" {
   }
 }
 
+run "test_storage_trigger_grants_gcs_publisher" {
+  command = plan
+
+  variables {
+    trigger = { type = "storage", bucket = "uploads" }
+  }
+
+  assert {
+    condition     = length(google_project_iam_member.gcs_pubsub_publisher) == 1 && google_project_iam_member.gcs_pubsub_publisher[0].role == "roles/pubsub.publisher"
+    error_message = "Storage triggers must grant the GCS service agent pubsub.publisher."
+  }
+}
+
+run "test_http_has_no_gcs_publisher" {
+  command = plan
+
+  assert {
+    condition     = length(google_project_iam_member.gcs_pubsub_publisher) == 0
+    error_message = "Only storage triggers grant the GCS service agent."
+  }
+}
+
 run "test_storage_trigger_requires_bucket" {
   command = plan
 

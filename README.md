@@ -9,6 +9,9 @@ Cloud Functions gen2 with a dedicated service account, secret-backed environment
 - Source from a local directory is zipped and uploaded to a per-function bucket with uniform access, public access prevention enforced and versioning on. The object name embeds the zip MD5, so code changes redeploy. `force_destroy` is on. Alternatively point `code` at an existing zip in GCS.
 - Secrets are exposed as environment variables at version `latest`, and the runtime service account receives `secretAccessor` on each distinct secret.
 - Event triggers (`pubsub`, `storage`, `eventarc`) retry on failure, run as the function service account, fire in the function region and grant it `roles/eventarc.eventReceiver`. `storage` fires on object finalize.
+- Storage triggers grant the project's Cloud Storage service agent `roles/pubsub.publisher` (non-authoritative member binding). The function region must match the bucket location.
+- `trigger.topic` must be the full `projects/<project>/topics/<topic>` name. The `eventarc` type supports only events that need no extra filters in v1.
+- `allAuthenticatedUsers` is not an invoker shortcut: ingress stays `ALLOW_INTERNAL_AND_GCLB` unless `allUsers` is present, so it does not open the function to the internet.
 - Defaults: 1 CPU, 256Mi, 0 to 10 instances, concurrency 1.
 - VPC access uses a Serverless VPC Access connector (`vpc = { connector, egress }`), because gen2 functions take a connector rather than a network and subnet.
 - The source input is named `code`, because `source` is a reserved variable name in Terraform.
@@ -58,11 +61,13 @@ No modules.
 | [google_cloud_run_v2_service_iam_member.invoker](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_run_v2_service_iam_member) | resource |
 | [google_cloudfunctions2_function.this](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions2_function) | resource |
 | [google_project_iam_member.eventarc_receiver](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.gcs_pubsub_publisher](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_secret_manager_secret_iam_member.runtime](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_member) | resource |
 | [google_service_account.this](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
 | [google_storage_bucket.source](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
 | [google_storage_bucket_object.source](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object) | resource |
 | [archive_file.source](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
+| [google_storage_project_service_account.gcs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/storage_project_service_account) | data source |
 
 ## Inputs
 
@@ -82,7 +87,7 @@ No modules.
 | <a name="input_resources"></a> [resources](#input\_resources) | Instance resource limits. | <pre>object({<br/>    cpu    = optional(string, "1")<br/>    memory = optional(string, "256Mi")<br/>  })</pre> | `{}` | no |
 | <a name="input_scaling"></a> [scaling](#input\_scaling) | Instance scaling: minimum and maximum instances and requests per instance. | <pre>object({<br/>    min         = optional(number, 0)<br/>    max         = optional(number, 10)<br/>    concurrency = optional(number, 1)<br/>  })</pre> | `{}` | no |
 | <a name="input_secret_env"></a> [secret\_env](#input\_secret\_env) | Secret-backed environment variables, env name => Secret Manager secret. A short id (same project) or a full projects/<project>/secrets/<id> name for a secret in another project. The latest version is exposed and the runtime service account receives secretAccessor. | `map(string)` | `{}` | no |
-| <a name="input_trigger"></a> [trigger](#input\_trigger) | What invokes the function. type is http, pubsub (needs topic), storage (needs bucket; fires on object finalize) or eventarc (needs event\_type, for example google.cloud.audit.log.v1.written). | <pre>object({<br/>    type       = string<br/>    topic      = optional(string)<br/>    bucket     = optional(string)<br/>    event_type = optional(string)<br/>  })</pre> | <pre>{<br/>  "type": "http"<br/>}</pre> | no |
+| <a name="input_trigger"></a> [trigger](#input\_trigger) | What invokes the function. type is http, pubsub (needs topic, the full projects/<project>/topics/<topic> name), storage (needs bucket; fires on object finalize; the function region must match the bucket location) or eventarc (needs event\_type; only events that need no extra filters are supported). | <pre>object({<br/>    type       = string<br/>    topic      = optional(string)<br/>    bucket     = optional(string)<br/>    event_type = optional(string)<br/>  })</pre> | <pre>{<br/>  "type": "http"<br/>}</pre> | no |
 | <a name="input_vpc"></a> [vpc](#input\_vpc) | Serverless VPC Access egress (gen2 functions use a connector, not direct network/subnet). connector is the full connector name projects/<p>/locations/<r>/connectors/<c>; egress is ALL\_TRAFFIC or PRIVATE\_RANGES\_ONLY. Null disables VPC access. | <pre>object({<br/>    connector = string<br/>    egress    = optional(string, "PRIVATE_RANGES_ONLY")<br/>  })</pre> | `null` | no |
 
 ## Outputs

@@ -81,6 +81,20 @@ resource "google_project_iam_member" "eventarc_receiver" {
   member  = "serviceAccount:${google_service_account.this[0].email}"
 }
 
+data "google_storage_project_service_account" "gcs" {
+  count = var.create && var.trigger.type == "storage" ? 1 : 0
+
+  project = var.project_id
+}
+
+resource "google_project_iam_member" "gcs_pubsub_publisher" {
+  count = var.create && var.trigger.type == "storage" ? 1 : 0
+
+  project = var.project_id
+  role    = "roles/pubsub.publisher"
+  member  = "serviceAccount:${data.google_storage_project_service_account.gcs[0].email_address}"
+}
+
 resource "google_cloudfunctions2_function" "this" {
   count = var.create ? 1 : 0
 
@@ -147,6 +161,7 @@ resource "google_cloudfunctions2_function" "this" {
   depends_on = [
     google_secret_manager_secret_iam_member.runtime,
     google_project_iam_member.eventarc_receiver,
+    google_project_iam_member.gcs_pubsub_publisher,
   ]
 }
 
