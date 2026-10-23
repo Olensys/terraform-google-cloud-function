@@ -16,14 +16,20 @@ Cloud Functions gen2 with a dedicated service account, secret-backed environment
 - VPC access uses a Serverless VPC Access connector (`vpc = { connector, egress }`), because gen2 functions take a connector rather than a network and subnet.
 - The source input is named `code`, because `source` is a reserved variable name in Terraform.
 - Cross-variable rules (trigger requirements, `code` fields per type) are preconditions on `output.uri`.
+- `context.extra_tags` keys and values are normalised to valid GCP label syntax (lowercase, `[^a-z0-9_-]` → `-`, 63 chars); `labels` are applied verbatim and win.
 
 ## Usage
 
 ```hcl
-module "this" {
-  source = "git::https://github.com/Olensys/terraform-google-cloud-function.git?ref=v1.0.0"
+module "naming" {
+  source  = "git::https://github.com/Olensys/terraform-null-naming.git?ref=v1.0.1"
+  context = var.context
+}
 
-  name        = "example-fn"
+module "this" {
+  source = "git::https://github.com/Olensys/terraform-google-cloud-function.git?ref=v1.1.0"
+
+  name        = module.naming.name
   context     = local.context
   project_id  = "my-project"
   labels      = module.naming.labels
