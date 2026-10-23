@@ -225,12 +225,12 @@ run "test_tags_contract" {
       application  = "example"
       owner        = "platform"
       cost_center  = "eng"
-      extra_tags   = { owner = "y", team = "z" }
+      extra_tags   = { Owner = "y", Team = "Core Team" }
     }
   }
 
   assert {
-    condition     = output.labels.owner == "x" && output.labels.team == "z"
+    condition     = output.labels.owner == "x" && output.labels.team == "core-team"
     error_message = "var.labels must win and context.extra_tags must be merged."
   }
 }

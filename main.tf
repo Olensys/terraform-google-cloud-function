@@ -1,5 +1,7 @@
 locals {
-  labels = merge(var.context.extra_tags, var.labels)
+  extra_labels = { for k, v in var.context.extra_tags :
+  substr(replace(lower(k), "/[^a-z0-9_-]/", "-"), 0, 63) => substr(replace(lower(v), "/[^a-z0-9_-]/", "-"), 0, 63) }
+  labels = merge(local.extra_labels, var.labels)
 
   local_source = var.create && var.code.type == "local_dir"
   event_driven = var.trigger.type != "http"
