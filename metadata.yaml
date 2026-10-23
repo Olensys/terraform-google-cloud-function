@@ -4,7 +4,7 @@ tier: capability          # primitive | capability | blueprint
 maturity: experimental    # experimental | stable | deprecated
 description: Cloud Functions gen2 with a dedicated service account, secret-backed environment, HTTP or event triggers, and a versioned source bucket
 owners: [platform]
-upstream: null            # e.g. "terraform-aws-modules/s3-bucket/aws 5.17.0"
-pairs_with: null          # e.g. "terraform-google-gcs-bucket"
+upstream: null
+pairs_with: terraform-aws-lambda-function
 registry_name: terraform-google-cloud-function
 deprecated: null          # { removal: YYYY-MM-DD, replacement: <repo> }

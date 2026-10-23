@@ -1,1 +1,3 @@
 # One ID per line, each with a justification comment.
+# Source bucket holds only the function zip; Google-managed encryption is accepted, a CMK is not wired through this module.
+GCP-0066

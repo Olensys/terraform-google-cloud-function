@@ -2,6 +2,10 @@
 run "apply_minimal" {
   command = apply
 
+  variables {
+    project_id = "olensys-integration"
+  }
+
   module {
     source = "./examples/minimal"
   }
