@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/Olensys/terraform-google-cloud-function/compare/v1.1.0...v1.1.1) (2026-10-24)
+
+
+### Bug Fixes
+
+* **examples:** pin naming module to v1.0.1 ([52d0591](https://github.com/Olensys/terraform-google-cloud-function/commit/52d0591d8f883f23c0a1a16bcb528e76757c4c21))
+* run integration on change and weekly instead of nightly ([14bdc80](https://github.com/Olensys/terraform-google-cloud-function/commit/14bdc8028bb47bc8298fb458fa2bc1ff4171e2cb))
+
 ## 1.1.0
 
 ### Fixes
