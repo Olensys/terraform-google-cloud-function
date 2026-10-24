@@ -15,7 +15,7 @@ locals {
   context = {
     organization = "olensys"
     environment  = "test"
-    application  = "example"
+    application  = "func"
     owner        = "platform"
     cost_center  = "eng"
   }
@@ -30,7 +30,7 @@ module "naming" {
 module "this" {
   source = "../../"
 
-  name        = "example-fn"
+  name        = "olensys-test-func"
   context     = local.context
   project_id  = var.project_id
   labels      = module.naming.labels
