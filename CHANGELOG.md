@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/Olensys/terraform-google-cloud-function/compare/v1.1.1...v1.1.2) (2026-10-24)
+
+
+### Bug Fixes
+
+* **examples:** unique application slug so concurrent integration runs do not collide ([#4](https://github.com/Olensys/terraform-google-cloud-function/issues/4)) ([8b44479](https://github.com/Olensys/terraform-google-cloud-function/commit/8b4447941f7cbcfc331bbe8f65e91e40d69f7585))
+
 ## [1.1.1](https://github.com/Olensys/terraform-google-cloud-function/compare/v1.1.0...v1.1.1) (2026-10-24)
 
 
