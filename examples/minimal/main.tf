@@ -22,7 +22,7 @@ locals {
 }
 
 module "naming" {
-  source = "git::https://github.com/Olensys/terraform-null-naming.git?ref=v1.0.0"
+  source = "git::https://github.com/Olensys/terraform-null-naming.git?ref=v1.0.1"
 
   context = local.context
 }
