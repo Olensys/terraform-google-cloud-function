@@ -23,7 +23,7 @@ Cloud Functions gen2 with a dedicated service account, secret-backed environment
 ```hcl
 module "naming" {
   source  = "git::https://github.com/Olensys/terraform-null-naming.git?ref=v1.0.1"
-  context = var.context
+  context = local.context
 }
 
 module "this" {
