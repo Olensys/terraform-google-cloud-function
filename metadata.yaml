@@ -1,7 +1,7 @@
 name: terraform-google-cloud-function
 cloud: google          # aws | google | common
 tier: capability          # primitive | capability | blueprint
-maturity: experimental    # experimental | stable | deprecated
+maturity: stable    # experimental | stable | deprecated
 description: Cloud Functions gen2 with a dedicated service account, secret-backed environment, HTTP or event triggers, and a versioned source bucket
 owners: [platform]
 upstream: null
